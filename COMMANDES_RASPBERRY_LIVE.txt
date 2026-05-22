@@ -1,0 +1,45 @@
+COMMANDES RASPBERRY LIVE
+
+1. Activer les services
+sudo systemctl restart ai-camera-final.service
+sudo systemctl restart ai-camera-sender.service
+
+2. Voir l'etat des services
+sudo systemctl status ai-camera-final.service --no-pager -l
+sudo systemctl status ai-camera-sender.service --no-pager -l
+
+3. Voir les logs live du service camera
+sudo journalctl -u ai-camera-final.service -f -n 0
+
+4. Voir les logs live du service sender
+sudo journalctl -u ai-camera-sender.service -f -n 0
+
+5. Voir seulement les envois cloud en live
+sudo journalctl -u ai-camera-sender.service -f -n 0 | grep --line-buffered "\\[sender\\] sent"
+
+6. Voir le JSON local resultat en live
+watch -n 1 'cat /home/pi/ai_camera/output/result.json'
+
+7. Voir le JSON local + les crops en live
+watch -n 1 'echo "--- result.json ---"; cat /home/pi/ai_camera/output/result.json; echo; echo "--- crops ---"; ls -lt /home/pi/ai_camera/output/crops | head'
+
+8. Voir la derniere image croppee
+ls -lt /home/pi/ai_camera/output/crops | head
+
+9. Nettoyer avant un nouveau test live
+rm -f /home/pi/ai_camera/output/result*.json /home/pi/ai_camera/output/sent_ids_state.json
+rm -rf /home/pi/ai_camera/output/crops
+mkdir -p /home/pi/ai_camera/output/crops
+
+10. Redemarrer proprement apres nettoyage
+sudo systemctl restart ai-camera-final.service
+sudo systemctl restart ai-camera-sender.service
+
+11. Voir le dernier objet JSON formate proprement
+python3 - <<'PY'
+import json
+from pathlib import Path
+p = Path('/home/pi/ai_camera/output/result.json')
+data = json.loads(p.read_text(encoding='utf-8'))
+print(json.dumps(data[-1] if data else {}, indent=2, ensure_ascii=False))
+PY

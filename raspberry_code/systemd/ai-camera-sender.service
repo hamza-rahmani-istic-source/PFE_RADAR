@@ -1,0 +1,15 @@
+﻿[Unit]
+Description=AI Camera Lightweight Cloud Sender
+After=network-online.target ai-camera-final.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/ai_camera
+ExecStart=/home/pi/ai_camera/venv/bin/python -u /home/pi/ai_camera/light_cloud_sender.py --interval 1
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

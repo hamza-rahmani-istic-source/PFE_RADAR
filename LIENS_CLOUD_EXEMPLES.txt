@@ -1,0 +1,75 @@
+LIENS CLOUD EXEMPLES
+
+Base API:
+https://radar-cloud-api-641438482543.europe-west1.run.app
+
+Modele de trace:
+TRACE_ID=4ad75fe3-d01a-4647-a4bb-503372faef91
+
+1. Resultat complet JSON
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/results/TRACE_ID
+
+Exemple:
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/results/4ad75fe3-d01a-4647-a4bb-503372faef91
+
+2. Vue indexee type Firestore
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/chatbot/results/TRACE_ID
+
+Exemple:
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/chatbot/results/4ad75fe3-d01a-4647-a4bb-503372faef91
+
+3. Liste des fichiers debug d'une trace
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/TRACE_ID
+
+Exemple:
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/4ad75fe3-d01a-4647-a4bb-503372faef91
+
+4. Image input cloud du vehicule
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/TRACE_ID/file/0001_vehicle.jpg
+
+Exemple:
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/4ad75fe3-d01a-4647-a4bb-503372faef91/file/0001_vehicle.jpg
+
+5. Patch plaque
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/TRACE_ID/file/0001_plate_patch.jpg
+
+6. Plaque rectifiee
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/TRACE_ID/file/0001_plate_rectified.jpg
+
+7. Image OCR entree
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/TRACE_ID/file/0001_plate_ocr_input.jpg
+
+8. Payload input complet recu par le cloud
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/input/TRACE_ID
+
+Exemple:
+https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/input/4ad75fe3-d01a-4647-a4bb-503372faef91
+
+9. Bucket GCS du JSON resultat
+gs://radar-results-641438482543/results/TRACE_ID.json
+
+Exemple:
+gs://radar-results-641438482543/results/4ad75fe3-d01a-4647-a4bb-503372faef91.json
+
+10. Firestore
+Projet GCP: project-3e06db65-59c9-485b-9c1
+Collection: radar_results
+Document: TRACE_ID
+
+11. Telecharger facilement le JSON resultat depuis Windows PowerShell
+$trace = "4ad75fe3-d01a-4647-a4bb-503372faef91"
+Invoke-WebRequest -Uri "https://radar-cloud-api-641438482543.europe-west1.run.app/v1/results/$trace" -OutFile "$env:USERPROFILE\\Downloads\\$trace-result.json"
+
+12. Telecharger facilement l'image input cloud depuis Windows PowerShell
+$trace = "4ad75fe3-d01a-4647-a4bb-503372faef91"
+Invoke-WebRequest -Uri "https://radar-cloud-api-641438482543.europe-west1.run.app/v1/debug/$trace/file/0001_vehicle.jpg" -OutFile "$env:USERPROFILE\\Downloads\\$trace-vehicle.jpg"
+
+13. Lire rapidement le resultat depuis la Raspberry
+TRACE_ID=4ad75fe3-d01a-4647-a4bb-503372faef91
+python3 - <<'PY'
+import json, urllib.request, os
+trace_id = os.environ["TRACE_ID"]
+url = f"https://radar-cloud-api-641438482543.europe-west1.run.app/v1/results/{trace_id}"
+data = json.load(urllib.request.urlopen(url, timeout=60))
+print(json.dumps(data, indent=2, ensure_ascii=False))
+PY
